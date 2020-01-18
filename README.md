@@ -1,0 +1,1 @@
+# embedded-mq-spring-boot-starter
