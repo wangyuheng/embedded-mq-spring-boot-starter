@@ -1,0 +1,14 @@
+@startuml
+storage "Context" {
+    node consumer
+    node producer
+    database store
+    control transport
+
+    producer -down-> transport: send message
+    transport -down-> store
+    store -up-> transport
+    transport -up-> consumer: pull by topic
+
+}
+@enduml
