@@ -8,8 +8,8 @@ import com.github.wangyuheng.embeddedmq.Message;
  * @see Message
  */
 @FunctionalInterface
-public interface Producer {
+public interface Producer<T> {
 
-    void send(Message message);
+    void send(Message<T> message);
 
 }

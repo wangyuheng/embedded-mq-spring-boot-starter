@@ -1,5 +1,6 @@
 package com.github.wangyuheng.embeddedmq;
 
+import com.github.wangyuheng.embeddedmq.producer.Producer;
 import com.github.wangyuheng.embeddedmq.store.Store;
 import com.github.wangyuheng.embeddedmq.transport.Transport;
 import org.junit.Test;
@@ -27,6 +28,7 @@ public class MqAutoConfigurationTest {
         this.contextRunner.run(context -> {
             assertNotNull(context.getBean(Store.class));
             assertNotNull(context.getBean(Transport.class));
+            assertNotNull(context.getBean(Producer.class));
         });
     }
 

@@ -12,15 +12,15 @@ import java.util.Map;
 @Component
 public class TestMockConsumer {
 
-    public final String CONSUMER_TOPIC = "consumer.topic";
-    public final String CUSTOM_CONSUMER_ID = "consumer2";
+    public static final String CONSUMER_TOPIC = "consumer.topic";
+    public static final String CUSTOM_CONSUMER_ID = "consumer2";
 
-    public Map<String, List<Message>> consumerRecordMap = new HashMap<>(16);
+    public static final Map<String, List<Message>> consumerRecordMap = new HashMap<>(16);
 
     @PostConstruct
     public void initMap() {
         consumerRecordMap.put("consumer1", new ArrayList<>());
-        consumerRecordMap.put("consumer2", new ArrayList<>());
+        consumerRecordMap.put(CUSTOM_CONSUMER_ID, new ArrayList<>());
     }
 
     public void reset() {
@@ -34,7 +34,7 @@ public class TestMockConsumer {
 
     @Consumer(topic = CONSUMER_TOPIC, id = CUSTOM_CONSUMER_ID)
     public void consumer2(Message message) {
-        consumerRecordMap.get("consumer2").add(message);
+        consumerRecordMap.get(CUSTOM_CONSUMER_ID).add(message);
     }
 
 

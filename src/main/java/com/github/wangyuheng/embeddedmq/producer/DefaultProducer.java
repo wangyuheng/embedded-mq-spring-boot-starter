@@ -2,7 +2,6 @@ package com.github.wangyuheng.embeddedmq.producer;
 
 import com.github.wangyuheng.embeddedmq.Message;
 import com.github.wangyuheng.embeddedmq.transport.Transport;
-import org.springframework.stereotype.Component;
 
 /**
  * 默认消息发送者
@@ -10,8 +9,7 @@ import org.springframework.stereotype.Component;
  * @see Transport
  * @see Message
  */
-@Component
-public class DefaultProducer implements Producer {
+public class DefaultProducer<T> implements Producer<T> {
 
     private final Transport transport;
 
@@ -23,7 +21,7 @@ public class DefaultProducer implements Producer {
      * 发送消息
      */
     @Override
-    public void send(Message message) {
+    public void send(Message<T> message) {
         transport.transfer(message);
     }
 }

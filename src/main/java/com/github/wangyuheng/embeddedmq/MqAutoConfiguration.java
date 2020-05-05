@@ -2,6 +2,8 @@ package com.github.wangyuheng.embeddedmq;
 
 import com.github.wangyuheng.embeddedmq.consumer.ConsumerBeanDefinitionRegistryPostProcessor;
 import com.github.wangyuheng.embeddedmq.consumer.ConsumerCluster;
+import com.github.wangyuheng.embeddedmq.producer.DefaultProducer;
+import com.github.wangyuheng.embeddedmq.producer.Producer;
 import com.github.wangyuheng.embeddedmq.store.Store;
 import com.github.wangyuheng.embeddedmq.store.VmStore;
 import com.github.wangyuheng.embeddedmq.transport.Transport;
@@ -41,5 +43,12 @@ public class MqAutoConfiguration {
     public Transport transport(Store store, List<ConsumerCluster> consumerClusterList) {
         return new VmTransport(store, consumerClusterList);
     }
+
+    @Bean
+    @ConditionalOnMissingBean(Producer.class)
+    public <T> Producer<T> producer(Transport transport) {
+        return new DefaultProducer<>(transport);
+    }
+
 
 }

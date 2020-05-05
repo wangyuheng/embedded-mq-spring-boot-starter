@@ -22,8 +22,8 @@ import java.util.UUID;
 @SpringBootTest
 public class ConsumerClusterTest {
 
-    private static final String topic = UUID.randomUUID().toString();
-    private static final String clientId = UUID.randomUUID().toString();
+    private static final String TOPIC = UUID.randomUUID().toString();
+    private static final String CLIENT_ID = UUID.randomUUID().toString();
     private static List<Message> consumedMessages = new ArrayList<>();
     @Autowired
     private Producer producer;
@@ -38,14 +38,14 @@ public class ConsumerClusterTest {
 
     @Test
     public void should_toggle_consume_when_restart_or_pause() throws InterruptedException {
-        producer.send(new Message<>(topic, "This is a message 1!"));
+        producer.send(new Message<>(TOPIC, "This is a message 1!"));
         Thread.sleep(200);
         Assert.assertEquals(1, consumedMessages.size());
         cluster.pause();
-        producer.send(new Message<>(topic, "This is a message 2!"));
+        producer.send(new Message<>(TOPIC, "This is a message 2!"));
         Thread.sleep(200);
         Assert.assertEquals(1, consumedMessages.size());
-        producer.send(new Message<>(topic, "This is a message 3!"));
+        producer.send(new Message<>(TOPIC, "This is a message 3!"));
         cluster.restart();
         Thread.sleep(200);
         Assert.assertEquals(3, consumedMessages.size());
@@ -53,12 +53,12 @@ public class ConsumerClusterTest {
 
     @Test
     public void should_shutdown_consume_thread_and_cannot_restart() throws InterruptedException {
-        producer.send(new Message<>(topic, "This is a message 1!"));
+        producer.send(new Message<>(TOPIC, "This is a message 1!"));
         Thread.sleep(200);
         Assert.assertEquals(1, consumedMessages.size());
         cluster.shutdown();
         cluster.restart();
-        producer.send(new Message<>(topic, "This is a message 2!"));
+        producer.send(new Message<>(TOPIC, "This is a message 2!"));
         Thread.sleep(200);
         Assert.assertEquals(1, consumedMessages.size());
     }
@@ -69,8 +69,8 @@ public class ConsumerClusterTest {
         @Bean
         public ConsumerCluster testConsumerCluster1(Store store) {
             ConsumerCluster cluster = new ConsumerCluster();
-            cluster.setId(clientId);
-            cluster.setTopic(topic);
+            cluster.setId(CLIENT_ID);
+            cluster.setTopic(TOPIC);
             cluster.setMessageHandler(message -> consumedMessages.add(message));
             cluster.start(store);
             return cluster;

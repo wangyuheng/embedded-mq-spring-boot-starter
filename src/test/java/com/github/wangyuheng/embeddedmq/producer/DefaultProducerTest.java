@@ -14,6 +14,8 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.function.Consumer;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DefaultProducerTest {
@@ -24,7 +26,7 @@ public class DefaultProducerTest {
     public static final String CLIENT_ID_2 = "clientId2";
 
     @Autowired
-    private DefaultProducer producer;
+    private DefaultProducer<String> producer;
     @Autowired
     private Store store;
 
@@ -39,6 +41,9 @@ public class DefaultProducerTest {
 
     @Test
     public void should_group_store_by_topic_and_client_after_send() {
+        Consumer<Message<String>> c = message -> {};
+//        Stream.of("")
+//                .forEach(it->c);
         producer.send(multiMessage);
         producer.send(singleMessage);
         producer.send(singleMessage);
