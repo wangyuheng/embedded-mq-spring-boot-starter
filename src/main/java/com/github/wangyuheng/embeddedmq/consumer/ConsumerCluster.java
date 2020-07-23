@@ -58,7 +58,7 @@ public class ConsumerCluster implements Serializable {
 
     /**
      * 开启消费线程
-     *  只能开启一次
+     * 只能开启一次
      */
     public synchronized void start(Store store) {
         if (!initialized.get()) {
@@ -80,7 +80,7 @@ public class ConsumerCluster implements Serializable {
 
     /**
      * 暂停消费
-      */
+     */
     public void pause() {
         runToggle.set(false);
     }
@@ -121,6 +121,8 @@ public class ConsumerCluster implements Serializable {
                     }
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
+                } catch (Exception e) {
+                    //TODO retry | save?
                 }
             }
         }
