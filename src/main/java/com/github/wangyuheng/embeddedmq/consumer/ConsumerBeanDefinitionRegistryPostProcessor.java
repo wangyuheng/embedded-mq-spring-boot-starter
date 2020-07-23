@@ -34,7 +34,7 @@ public class ConsumerBeanDefinitionRegistryPostProcessor implements BeanPostProc
     }
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         Class<?> targetClass = AopProxyUtils.ultimateTargetClass(bean);
         Method[] methods = ReflectionUtils.getAllDeclaredMethods(targetClass);
         for (Method method : methods) {
@@ -43,8 +43,10 @@ public class ConsumerBeanDefinitionRegistryPostProcessor implements BeanPostProc
                 final String id = StringUtils.isEmpty(method.getAnnotation(Consumer.class).id()) ? beanName + method.getName() : method.getAnnotation(Consumer.class).id();
                 final BeanFactory beanFactory = applicationContext.getBeanFactory();
                 final Store store = beanFactory.getBean(Store.class);
-
-                final MessageHandler messageHandler = message -> ReflectionUtils.invokeMethod(method, bean, message);
+                final MessageHandler messageHandler = message -> {
+                    ReflectionUtils.makeAccessible(method);
+                    ReflectionUtils.invokeMethod(method, bean, message);
+                };
 
                 final BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(ConsumerCluster.class, () -> {
                     ConsumerCluster consumerCluster = new ConsumerCluster();
